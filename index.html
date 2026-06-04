@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MovieFinder — Discover Your Next Obsession</title>
+  <meta name="description" content="Search movies by actor, discover trending films, and manage your watchlist with MovieFinder." />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Playfair+Display:ital,wght@0,700;1,600&display=swap" rel="stylesheet" />
+
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/animations.css" />
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════════ NAVBAR ═══ -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-inner">
+      <a href="#" class="logo" onclick="goHome()">
+        <span class="logo-icon"><i class="fa-solid fa-film"></i></span>
+        <span class="logo-text">Movie<em>Finder</em></span>
+      </a>
+
+      <div class="nav-links">
+        <a href="#trending-section" class="nav-link">Trending</a>
+        <a href="#top-rated-section" class="nav-link">Top Rated</a>
+        <a href="#recent-section" class="nav-link">New Releases</a>
+        <a href="#" class="nav-link" onclick="openWatchlist()">
+          Watchlist <span class="watchlist-badge" id="watchlist-badge">0</span>
+        </a>
+      </div>
+
+      <div class="nav-actions">
+        <button class="theme-toggle" id="themeToggle" title="Toggle theme">
+          <i class="fa-solid fa-moon" id="themeIcon"></i>
+        </button>
+        <button class="history-btn" id="historyBtn" title="Search history">
+          <i class="fa-solid fa-clock-rotate-left"></i>
+        </button>
+        <button class="hamburger" id="hamburger" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile menu -->
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="#trending-section" class="mobile-link">Trending</a>
+      <a href="#top-rated-section" class="mobile-link">Top Rated</a>
+      <a href="#recent-section" class="mobile-link">New Releases</a>
+      <a href="#" class="mobile-link" onclick="openWatchlist()">Watchlist</a>
+    </div>
+  </nav>
+
+  <!-- ═══════════════════════════════════════════ HERO ═══ -->
+  <section class="hero" id="hero">
+    <div class="hero-bg" id="heroBg"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content" id="heroContent">
+      <div class="hero-badge"><i class="fa-solid fa-fire"></i> Featured Today</div>
+      <h1 class="hero-title" id="heroTitle">Discover Cinema</h1>
+      <p class="hero-tagline" id="heroTagline">Millions of movies, curated just for you.</p>
+      <div class="hero-meta" id="heroMeta"></div>
+      <div class="hero-actions" id="heroActions">
+        <button class="btn-hero-primary" id="heroDetailsBtn">
+          <i class="fa-solid fa-circle-info"></i> More Info
+        </button>
+        <button class="btn-hero-secondary" id="heroWatchlistBtn">
+          <i class="fa-solid fa-plus"></i> Add to Watchlist
+        </button>
+      </div>
+    </div>
+
+    <!-- Search bar overlaid on hero bottom -->
+    <div class="hero-search-wrap">
+      <div class="search-container">
+        <div class="search-box" id="searchBox">
+          <i class="fa-solid fa-magnifying-glass search-icon"></i>
+          <input
+            type="text"
+            id="searchInput"
+            class="search-input"
+            placeholder="Search by actor or actress name…"
+            autocomplete="off"
+          />
+          <button class="search-clear" id="searchClear" title="Clear">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+          <button class="search-btn" id="searchBtn">Search</button>
+        </div>
+        <!-- Autocomplete dropdown -->
+        <div class="autocomplete-dropdown" id="autocompleteDropdown"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════ MAIN ═══ -->
+  <main class="main" id="main">
+
+    <!-- ── Popular actors chips (default state) ── -->
+    <section class="popular-actors-section" id="popularActorsSection">
+      <div class="section-header">
+        <h2 class="section-title">Popular Actors</h2>
+        <p class="section-sub">Start with a favourite or search above</p>
+      </div>
+      <div class="actors-chips" id="actorsChips">
+        <!-- injected by JS -->
+      </div>
+    </section>
+
+    <!-- ── Actor Profile (shown after search) ── -->
+    <section class="actor-profile-section hidden" id="actorProfileSection">
+      <div class="actor-profile-card">
+        <div class="actor-photo-wrap">
+          <img class="actor-photo" id="actorPhoto" src="" alt="" />
+        </div>
+        <div class="actor-info">
+          <h2 class="actor-name" id="actorName"></h2>
+          <div class="actor-meta-row">
+            <span class="actor-meta-item"><i class="fa-solid fa-cake-candles"></i> <span id="actorBirthday"></span></span>
+            <span class="actor-meta-item"><i class="fa-solid fa-location-dot"></i> <span id="actorBirthplace"></span></span>
+          </div>
+          <p class="actor-bio" id="actorBio"></p>
+          <button class="bio-toggle" id="bioToggle">Read more</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Sort / filter bar ── -->
+    <div class="sort-bar hidden" id="sortBar">
+      <div class="sort-label"><i class="fa-solid fa-sliders"></i> Sort by:</div>
+      <div class="sort-buttons">
+        <button class="sort-btn active" data-sort="popularity">Popularity</button>
+        <button class="sort-btn" data-sort="rating">Rating</button>
+        <button class="sort-btn" data-sort="date">Release Date</button>
+        <button class="sort-btn" data-sort="alpha">A–Z</button>
+      </div>
+    </div>
+
+    <!-- ── Actor Movies grid ── -->
+    <section class="movies-section hidden" id="actorMoviesSection">
+      <div class="section-header">
+        <h2 class="section-title" id="actorMoviesTitle">Movies</h2>
+        <span class="movie-count" id="movieCount"></span>
+      </div>
+      <div class="movies-grid" id="actorMoviesGrid">
+        <!-- injected by JS -->
+      </div>
+      <div class="pagination" id="actorPagination"></div>
+    </section>
+
+    <!-- ── Recommended (shown after viewing movie) ── -->
+    <section class="movies-section hidden" id="recommendedSection">
+      <div class="section-header">
+        <h2 class="section-title"><i class="fa-solid fa-thumbs-up"></i> Recommended For You</h2>
+      </div>
+      <div class="horizontal-scroll-wrap">
+        <button class="scroll-arrow left" onclick="scrollRow('recommendedRow', -1)"><i class="fa-solid fa-chevron-left"></i></button>
+        <div class="horizontal-scroll" id="recommendedRow"></div>
+        <button class="scroll-arrow right" onclick="scrollRow('recommendedRow', 1)"><i class="fa-solid fa-chevron-right"></i></button>
+      </div>
+    </section>
+
+    <!-- ── Similar Movies ── -->
+    <section class="movies-section hidden" id="similarSection">
+      <div class="section-header">
+        <h2 class="section-title"><i class="fa-solid fa-film"></i> Similar Movies You May Like</h2>
+      </div>
+      <div class="horizontal-scroll-wrap">
+        <button class="scroll-arrow left" onclick="scrollRow('similarRow', -1)"><i class="fa-solid fa-chevron-left"></i></button>
+        <div class="horizontal-scroll" id="similarRow"></div>
+        <button class="scroll-arrow right" onclick="scrollRow('similarRow', 1)"><i class="fa-solid fa-chevron-right"></i></button>
+      </div>
+    </section>
+
+    <!-- ── Recently Viewed ── -->
+    <section class="movies-section hidden" id="recentlyViewedSection">
+      <div class="section-header">
+        <h2 class="section-title"><i class="fa-regular fa-clock"></i> Recently Viewed</h2>
+        <button class="clear-btn" onclick="clearRecentlyViewed()">Clear</button>
+      </div>
+      <div class="horizontal-scroll-wrap">
+        <button class="scroll-arrow left" onclick="scrollRow('recentlyViewedRow', -1)"><i class="fa-solid fa-chevron-left"></i></button>
+        <div class="horizontal-scroll" id="recentlyViewedRow"></div>
+        <button class="scroll-arrow right" onclick="scrollRow('recentlyViewedRow', 1)"><i class="fa-solid fa-chevron-right"></i></button>
+      </div>
+    </section>
+
+    <!-- ── Trending ── -->
+    <section class="movies-section" id="trending-section">
+      <div class="section-header">
+        <h2 class="section-title"><i class="fa-solid fa-fire"></i> Trending Now</h2>
+        <div class="trending-toggle">
+          <button class="trend-btn active" data-window="day">Today</button>
+          <button class="trend-btn" data-window="week">This Week</button>
+        </div>
+      </div>
+      <div class="horizontal-scroll-wrap">
+        <button class="scroll-arrow left" onclick="scrollRow('trendingRow', -1)"><i class="fa-solid fa-chevron-left"></i></button>
+        <div class="horizontal-scroll" id="trendingRow">
+          <!-- skeleton placeholders -->
+          <div class="skeleton-card"></div>
+          <div class="skeleton-card"></div>
+          <div class="skeleton-card"></div>
+          <div class="skeleton-card"></div>
+          <div class="skeleton-card"></div>
+        </div>
+        <button class="scroll-arrow right" onclick="scrollRow('trendingRow', 1)"><i class="fa-solid fa-chevron-right"></i></button>
+      </div>
+    </section>
+
+    <!-- ── Top Rated ── -->
+    <section class="movies-section" id="top-rated-section">
+      <div class="section-header">
+        <h2 class="section-title"><i class="fa-solid fa-star"></i> Top Rated</h2>
+      </div>
+      <div class="horizontal-scroll-wrap">
+        <button class="scroll-arrow left" onclick="scrollRow('topRatedRow', -1)"><i class="fa-solid fa-chevron-left"></i></button>
+        <div class="horizontal-scroll" id="topRatedRow">
+          <div class="skeleton-card"></div>
+          <div class="skeleton-card"></div>
+          <div class="skeleton-card"></div>
+          <div class="skeleton-card"></div>
+          <div class="skeleton-card"></div>
+        </div>
+        <button class="scroll-arrow right" onclick="scrollRow('topRatedRow', 1)"><i class="fa-solid fa-chevron-right"></i></button>
+      </div>
+    </section>
+
+    <!-- ── Recent Releases ── -->
+    <section class="movies-section" id="recent-section">
+      <div class="section-header">
+        <h2 class="section-title"><i class="fa-solid fa-calendar-check"></i> New Releases</h2>
+      </div>
+      <div class="horizontal-scroll-wrap">
+        <button class="scroll-arrow left" onclick="scrollRow('recentRow', -1)"><i class="fa-solid fa-chevron-left"></i></button>
+        <div class="horizontal-scroll" id="recentRow">
+          <div class="skeleton-card"></div>
+          <div class="skeleton-card"></div>
+          <div class="skeleton-card"></div>
+          <div class="skeleton-card"></div>
+          <div class="skeleton-card"></div>
+        </div>
+        <button class="scroll-arrow right" onclick="scrollRow('recentRow', 1)"><i class="fa-solid fa-chevron-right"></i></button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ═══════════════════════════════════════════ FOOTER ═══ -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="logo-text">Movie<em>Finder</em></span>
+        <p>Powered by <a href="https://www.themoviedb.org/" target="_blank">TMDB API</a></p>
+      </div>
+      <div class="footer-note">
+        This product uses the TMDB API but is not endorsed or certified by TMDB.
+      </div>
+    </div>
+  </footer>
+
+  <!-- ═══════════════════════════════════════ MOVIE MODAL ═══ -->
+  <div class="modal-overlay" id="movieModal">
+    <div class="modal-box" id="modalBox">
+      <button class="modal-close" id="modalClose"><i class="fa-solid fa-xmark"></i></button>
+
+      <div class="modal-banner" id="modalBanner"></div>
+
+      <div class="modal-body">
+        <div class="modal-poster-col">
+          <img class="modal-poster" id="modalPoster" src="" alt="" />
+          <div class="modal-actions">
+            <button class="modal-action-btn watchlist-toggle" id="modalWatchlistBtn">
+              <i class="fa-solid fa-plus"></i> Add to Watchlist
+            </button>
+            <button class="modal-action-btn" id="modalTrailerBtn">
+              <i class="fa-brands fa-youtube"></i> Watch Trailer
+            </button>
+          </div>
+        </div>
+
+        <div class="modal-info-col">
+          <h2 class="modal-title" id="modalTitle"></h2>
+          <div class="modal-sub-row">
+            <span class="modal-year" id="modalYear"></span>
+            <span class="modal-runtime" id="modalRuntime"></span>
+            <span class="modal-rating-badge" id="modalRatingBadge"></span>
+          </div>
+          <div class="modal-genres" id="modalGenres"></div>
+          <div class="modal-stars" id="modalStars"></div>
+          <p class="modal-overview" id="modalOverview"></p>
+
+          <div class="modal-cast-section">
+            <h4>Cast</h4>
+            <div class="cast-row" id="castRow"></div>
+          </div>
+
+          <div class="modal-similar-section">
+            <h4>Similar Movies</h4>
+            <div class="similar-row" id="modalSimilarRow"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ WATCHLIST PANEL ═══ -->
+  <div class="side-panel-overlay" id="watchlistOverlay">
+    <div class="side-panel" id="watchlistPanel">
+      <div class="panel-header">
+        <h3><i class="fa-solid fa-bookmark"></i> My Watchlist</h3>
+        <button class="panel-close" onclick="closeWatchlist()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="panel-body" id="watchlistBody">
+        <p class="empty-state">Your watchlist is empty.<br/>Start adding movies!</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ HISTORY PANEL ═══ -->
+  <div class="side-panel-overlay" id="historyOverlay">
+    <div class="side-panel" id="historyPanel">
+      <div class="panel-header">
+        <h3><i class="fa-solid fa-clock-rotate-left"></i> Search History</h3>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <button class="clear-btn" onclick="clearSearchHistory()">Clear All</button>
+          <button class="panel-close" onclick="closeHistory()"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+      </div>
+      <div class="panel-body" id="historyBody">
+        <p class="empty-state">No searches yet.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ TOAST ═══ -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- ═══════════════════════════════════════ CONFIG BANNER ═══ -->
+  <div class="config-banner hidden" id="configBanner">
+    <i class="fa-solid fa-triangle-exclamation"></i>
+    Please set your <strong>TMDB API Key</strong> in <code>js/config.js</code> to load real data.
+    <a href="https://www.themoviedb.org/settings/api" target="_blank">Get a free key →</a>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
