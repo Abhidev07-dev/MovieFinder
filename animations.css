@@ -1,0 +1,127 @@
+/* ═══════════════════════════════════════════════════════════════
+   MovieFinder — animations.css
+   Page-level transitions and special effects
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── Page Load Stagger ────────────────────────────────────────── */
+.movies-grid .movie-card:nth-child(1)  { animation-delay: 0.03s; }
+.movies-grid .movie-card:nth-child(2)  { animation-delay: 0.06s; }
+.movies-grid .movie-card:nth-child(3)  { animation-delay: 0.09s; }
+.movies-grid .movie-card:nth-child(4)  { animation-delay: 0.12s; }
+.movies-grid .movie-card:nth-child(5)  { animation-delay: 0.15s; }
+.movies-grid .movie-card:nth-child(6)  { animation-delay: 0.18s; }
+.movies-grid .movie-card:nth-child(7)  { animation-delay: 0.21s; }
+.movies-grid .movie-card:nth-child(8)  { animation-delay: 0.24s; }
+.movies-grid .movie-card:nth-child(9)  { animation-delay: 0.27s; }
+.movies-grid .movie-card:nth-child(10) { animation-delay: 0.30s; }
+.movies-grid .movie-card:nth-child(11) { animation-delay: 0.33s; }
+.movies-grid .movie-card:nth-child(12) { animation-delay: 0.36s; }
+.movies-grid .movie-card:nth-child(n+13) { animation-delay: 0.38s; }
+
+/* ── Horizontal row stagger ───────────────────────────────────── */
+.horizontal-scroll .movie-card:nth-child(1)  { animation-delay: 0.05s; }
+.horizontal-scroll .movie-card:nth-child(2)  { animation-delay: 0.10s; }
+.horizontal-scroll .movie-card:nth-child(3)  { animation-delay: 0.15s; }
+.horizontal-scroll .movie-card:nth-child(4)  { animation-delay: 0.20s; }
+.horizontal-scroll .movie-card:nth-child(5)  { animation-delay: 0.25s; }
+.horizontal-scroll .movie-card:nth-child(n+6) { animation-delay: 0.28s; }
+
+/* ── Pulse (for watchlist badge update) ───────────────────────── */
+@keyframes pulseBounce {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.4); }
+  70%  { transform: scale(0.9); }
+  100% { transform: scale(1); }
+}
+.pulse { animation: pulseBounce 0.4s cubic-bezier(0.4,0,0.2,1); }
+
+/* ── Glow on hover for accent elements ────────────────────────── */
+@keyframes glowPulse {
+  0%, 100% { box-shadow: 0 0 10px rgba(232,176,75,0.2); }
+  50%       { box-shadow: 0 0 24px rgba(232,176,75,0.5); }
+}
+
+/* ── Spinner ──────────────────────────────────────────────────── */
+.spinner-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 60px 0;
+  color: var(--text-muted);
+  font-size: 14px;
+}
+.spinner {
+  width: 40px; height: 40px;
+  border: 3px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── Star fill animation ──────────────────────────────────────── */
+@keyframes starPop {
+  0%   { transform: scale(0); opacity: 0; }
+  60%  { transform: scale(1.3); opacity: 1; }
+  100% { transform: scale(1); }
+}
+.modal-stars .fa-star {
+  animation: starPop 0.3s cubic-bezier(0.4,0,0.2,1) both;
+}
+.modal-stars .fa-star:nth-child(1)  { animation-delay: 0.05s; }
+.modal-stars .fa-star:nth-child(2)  { animation-delay: 0.10s; }
+.modal-stars .fa-star:nth-child(3)  { animation-delay: 0.15s; }
+.modal-stars .fa-star:nth-child(4)  { animation-delay: 0.20s; }
+.modal-stars .fa-star:nth-child(5)  { animation-delay: 0.25s; }
+.modal-stars .fa-star:nth-child(6)  { animation-delay: 0.30s; }
+.modal-stars .fa-star:nth-child(7)  { animation-delay: 0.35s; }
+.modal-stars .fa-star:nth-child(8)  { animation-delay: 0.40s; }
+.modal-stars .fa-star:nth-child(9)  { animation-delay: 0.45s; }
+.modal-stars .fa-star:nth-child(10) { animation-delay: 0.50s; }
+
+/* ── Hero parallax on scroll ──────────────────────────────────── */
+.hero-bg { will-change: transform; }
+
+/* ── Card shimmer while loading ───────────────────────────────── */
+@keyframes shimmer {
+  from { transform: translateX(-100%); }
+  to   { transform: translateX(100%); }
+}
+
+/* ── Modal slide in from bottom on mobile ─────────────────────── */
+@media (max-width: 640px) {
+  .modal-overlay { align-items: flex-end; padding: 0; }
+  .modal-box {
+    border-radius: var(--modal-radius) var(--modal-radius) 0 0;
+    max-height: 95svh;
+    width: 100%;
+    transform: translateY(40px);
+  }
+  .modal-overlay.open .modal-box { transform: translateY(0); }
+}
+
+/* ── Chip entrance ────────────────────────────────────────────── */
+.actors-chips .actor-chip:nth-child(1)  { animation-delay: 0.05s; }
+.actors-chips .actor-chip:nth-child(2)  { animation-delay: 0.10s; }
+.actors-chips .actor-chip:nth-child(3)  { animation-delay: 0.15s; }
+.actors-chips .actor-chip:nth-child(4)  { animation-delay: 0.20s; }
+.actors-chips .actor-chip:nth-child(5)  { animation-delay: 0.25s; }
+.actors-chips .actor-chip:nth-child(6)  { animation-delay: 0.30s; }
+.actors-chips .actor-chip:nth-child(7)  { animation-delay: 0.35s; }
+.actors-chips .actor-chip:nth-child(8)  { animation-delay: 0.40s; }
+.actors-chips .actor-chip:nth-child(n+9){ animation-delay: 0.42s; }
+
+/* ── Number counter animation ─────────────────────────────────── */
+@keyframes countUp {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.watchlist-badge { animation: countUp 0.2s both; }
+
+/* ── Focus visible ring ───────────────────────────────────────── */
+button:focus-visible, a:focus-visible, input:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
